@@ -3,7 +3,20 @@ RSpec.describe InsaneHook do
     expect(InsaneHook::VERSION).not_to be nil
   end
 
-  it "does something useful" do
-    expect(false).to eq(true)
+  it "has a pretty API" do
+    klass = Class.new do
+      include InsaneHook
+      need :required
+      allow :optional
+      call do
+        result required
+      end
+    end
+    instance = klass.new(required: 3)
+    expect { instance.result }.to raise_error InsaneHook::CommandNotRunError
+
+    actual = instance.call
+    expect(actual).to eq(instance)
+    expect(actual.result).to eq(3)
   end
 end

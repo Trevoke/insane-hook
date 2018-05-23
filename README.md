@@ -27,13 +27,15 @@ class YeOldeTaske
   allow :some_optional_arg
 
   call do
-    # do some work here
-    # attr_readers are available for some_required_arg
-    # and some_optional_arg
+    # attr_readers are available for:
+    # - some_required_arg
+    # - some_optional_arg
+    result meaningful_value
   end
 end
 
-YeOldeTaske.new(some_required_arg: 7).call
+task = YeOldeTaske.new(some_required_arg: 7).call # => task instance
+task.result # => meaningful_value
 ```
 
 ## Development
