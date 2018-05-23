@@ -30,12 +30,31 @@ class YeOldeTaske
     # attr_readers are available for:
     # - some_required_arg
     # - some_optional_arg
-    result meaningful_value
+    result "meaningful value"
   end
 end
 
-task = YeOldeTaske.new(some_required_arg: 7).call # => task instance
-task.result # => meaningful_value
+task = YeOldeTaske.new(some_required_arg: "input") # => YeOldeTaske instance
+task.result # => raises InsaneHook::CommandNotRunError
+task.call # => YeOldeTaske instance
+task.result # => "meaningful value"
+```
+
+```ruby
+class YeOldeTaske
+  include InsaneHook
+  need :some_required_arg
+  allow :some_optional_arg
+
+  call do
+    # attr_readers are available for:
+    # - some_required_arg
+    # - some_optional_arg
+  end
+end
+
+task = YeOldeTaske.new(some_required_arg: 7).call
+task.result # => nil
 ```
 
 ## Development
