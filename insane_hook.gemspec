@@ -6,12 +6,12 @@ require "insane_hook/version"
 Gem::Specification.new do |spec|
   spec.name          = "insane_hook"
   spec.version       = InsaneHook::VERSION
-  spec.authors       = ["Aldric Giacomoni"]
-  spec.email         = ["trevoke@gmail.com"]
+  spec.authors       = ["Aldric Giacomoni, Ahmad Ragab"]
+  spec.email         = ["trevoke@gmail.com, aragab@stashinvest.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Another implementation of the command pattern that provides a DSL.}
+  spec.description   = %q{Because DSLs are cool and if you're gonna use the command pattern, might as well go all the way.}
+  spec.homepage      = "https://github.com/Trevoke/insane-hook"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

@@ -1,8 +1,6 @@
 # InsaneHook
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/insane_hook`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Enjoy the enforcing-DSL of this command-patterny gem.
 
 ## Installation
 
@@ -22,7 +20,21 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+class YeOldeTaske
+  include InsaneHook
+  need :some_required_arg
+  allow :some_optional_arg
+
+  call do
+    # do some work here
+    # attr_readers are available for some_required_arg
+    # and some_optional_arg
+  end
+end
+
+YeOldeTaske.new(some_required_arg: 7).call
+```
 
 ## Development
 
@@ -32,7 +44,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/insane_hook.
+Bug reports and pull requests are welcome on GitHub at https://github.com/trevoke/insane_hook.
 
 ## License
 
