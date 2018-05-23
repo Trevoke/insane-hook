@@ -34,6 +34,8 @@ class YeOldeTaske
   end
 end
 
+YeOldeTaske.new # => InsaneHook::MissingArgumentError
+
 task = YeOldeTaske.new(some_required_arg: "input") # => YeOldeTaske instance
 task.result # => raises InsaneHook::CommandNotRunError
 task.call # => YeOldeTaske instance
@@ -55,6 +57,9 @@ end
 
 task = YeOldeTaske.new(some_required_arg: 7).call
 task.result # => nil
+
+# Also
+task = YeOldeTaske.call(some_required_arg: 7)
 ```
 
 ## Development
