@@ -1,16 +1,13 @@
 require "insane_hook/version"
+require "insane_hook/errors"
+require "insane_hook/class_methods"
 
 module InsaneHook
-  ARGS_VAR = :@@_command
-  REQUIRED_ARGS = :required
-  OPTIONAL_ARGS = :optional
-  RESULT_VAR = :@_result
-  NO_ARG = :_no_value
-  class CommandNotRunError < StandardError ; end
-  class MissingArgumentError < StandardError ; end
+  include InsaneHook::Errors
+  include InsaneHook::Constants
 
   def self.included(mod)
-    mod.class_variable_set(::InsaneHook::ARGS_VAR, {REQUIRED_ARGS => [], OPTIONAL_ARGS => []})
+    mod.class_variable_set(ARGS_VAR, {REQUIRED_ARGS => [], OPTIONAL_ARGS => []})
     mod.extend(ClassMethods)
     mod.define_singleton_method(:need, mod.instance_method(:_need))
     mod.define_singleton_method(:allow, mod.instance_method(:_allow))
@@ -19,28 +16,28 @@ module InsaneHook
 
   def result(value=NO_ARG)
     if value == NO_ARG
-      if instance_variable_defined?(::InsaneHook::RESULT_VAR)
-        instance_variable_get(::InsaneHook::RESULT_VAR)
+      if instance_variable_defined?(RESULT_VAR)
+        instance_variable_get(RESULT_VAR)
       else
         raise CommandNotRunError
       end
     else
-      instance_variable_set(::InsaneHook::RESULT_VAR, value)
+      instance_variable_set(RESULT_VAR, value)
     end
   end
 
   def _need(key)
     fail "#{key} is not a symbol" unless key.is_a? Symbol
-    args = self.class_variable_get(::InsaneHook::ARGS_VAR)
+    args = self.class_variable_get(ARGS_VAR)
     args[REQUIRED_ARGS] << key
-    self.class_variable_set(::InsaneHook::ARGS_VAR, args)
+    self.class_variable_set(ARGS_VAR, args)
   end
 
   def _allow(key)
     fail "#{key} is not a symbol" unless key.is_a? Symbol
-    args = self.class_variable_get(::InsaneHook::ARGS_VAR)
+    args = self.class_variable_get(ARGS_VAR)
     args[OPTIONAL_ARGS] << key
-    self.class_variable_set(::InsaneHook::ARGS_VAR, args)
+    self.class_variable_set(ARGS_VAR, args)
   end
 
   def _call(**args, &block)
@@ -56,23 +53,5 @@ module InsaneHook
       new(**args).call
     end
 
-  end
-
-  module ClassMethods
-    def new(**args)
-      obj = self.allocate
-      self.class_variable_get(::InsaneHook::ARGS_VAR)[REQUIRED_ARGS].each do |var|
-        value = args.fetch(var) { raise(::InsaneHook::MissingArgumentError, "#{var} not provided in #{self.class}") }
-        obj.instance_variable_set("@#{var}", value)
-        obj.class.class_eval{attr_reader var}
-      end
-      self.class_variable_get(::InsaneHook::ARGS_VAR)[OPTIONAL_ARGS].each do |var|
-        value = args.fetch(var, nil)
-        obj.instance_variable_set("@#{var}", value)
-        obj.class.class_eval{attr_reader var}
-      end
-      obj.send :initialize
-      obj
-    end
   end
 end
