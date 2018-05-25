@@ -62,6 +62,12 @@ task.result # => nil
 task = YeOldeTaske.call(some_required_arg: 7)
 ```
 
+## Design decisions
+1. Usage of `#call` with no arguments is idiomatic Ruby. Procs and method objects respond to `#call`, so we are extending an existing Ruby pattern.
+2. Usage of `.call` with arguments is less idiomatic, but common enough because of the above.
+3. Commands should not return anything, but if you are forced to check a result, then set the result to a single object and work off of that object, for instance if you want to use the command as one of the clauses of a case statement (in which case the result would be a boolean)
+4. Composition is usually better than Inheritance, especially in a language that doesn't support multiple inheritance. You can inherit from something if you need to.
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
