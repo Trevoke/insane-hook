@@ -3,15 +3,18 @@ RSpec.describe InsaneHook do
     expect(InsaneHook::VERSION).not_to be nil
   end
 
-  it "has a pretty API" do
+  let(:klass) do
     klass = Class.new do
       include InsaneHook
-      need :required
-      allow :optional
+      requires :required
+      fallbacks :optional
       call do
         result required
       end
     end
+  end
+
+  it "has a pretty API" do
     instance = klass.new(required: 3)
     expect { instance.result }.to raise_error InsaneHook::CommandNotRunError
 
@@ -21,27 +24,11 @@ RSpec.describe InsaneHook do
   end
 
   it "has a class-level call method" do
-    klass = Class.new do
-      include InsaneHook
-      need :required
-      allow :optional
-      call do
-        result required
-      end
-    end
     actual = klass.call(required: 3)
     expect(actual.result).to eq(3)
   end
 
   it "blows up if a required argument is not passed in" do
-    klass = Class.new do
-      include InsaneHook
-      need :required
-      allow :optional
-      call do
-        result required
-      end
-    end
     expect { klass.new }.to raise_error InsaneHook::MissingArgumentError
   end
 end

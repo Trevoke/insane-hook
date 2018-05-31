@@ -3,6 +3,7 @@ require "insane_hook/constants"
 module ClassMethods
   include InsaneHook::Constants
   include InsaneHook::Errors
+
   def new(**args)
     obj = self.allocate
     self.class_variable_get(ARGS_VAR)[REQUIRED_ARGS].each do |var|
@@ -17,5 +18,33 @@ module ClassMethods
     end
     obj.send :initialize
     obj
+  end
+
+  def requires(key)
+    fail "#{key} is not a symbol" unless key.is_a? Symbol
+    args = self.class_variable_get(ARGS_VAR)
+    args[REQUIRED_ARGS] << key
+    self.class_variable_set(ARGS_VAR, args)
+  end
+
+  def fallbacks(key)
+    fail "#{key} is not a symbol" unless key.is_a? Symbol
+    args = self.class_variable_get(ARGS_VAR)
+    args[OPTIONAL_ARGS] << key
+    self.class_variable_set(ARGS_VAR, args)
+  end
+
+  def call(**args, &block)
+    if block_given?
+      raise "Block cannot take arguments" if block.arity > 0
+      raise "call method already defined" if self.instance_methods.include?(:call)
+      define_method(:call) do
+        result(nil)
+        instance_eval(&block)
+        self
+      end
+    else
+      new(**args).call
+    end
   end
 end

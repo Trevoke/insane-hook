@@ -81,3 +81,22 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/trevok
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+### A note for later
+
+How much self-shame do I have?
+
+```ruby
+module ClassMethods
+  def requires(*x)
+    class_eval """
+      def self.new(#{x}:)
+        obj = self.allocate
+        obj.instance_variable_set :@x, #{x}
+        obj.send :initialize
+        obj
+      end
+    """
+  end
+end
+```
