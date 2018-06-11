@@ -63,10 +63,9 @@ task = YeOldeTaske.call(some_required_arg: 7)
 ```
 
 ## Design decisions
-1. Usage of `#call` with no arguments is idiomatic Ruby. Procs and method objects respond to `#call`, so we are extending an existing Ruby pattern.
-2. Usage of `.call` with arguments is less idiomatic, but common enough because of the above.
-3. Commands should not return anything, but if you are forced to check a result, then set the result to a single object and work off of that object, for instance if you want to use the command as one of the clauses of a case statement (in which case the result would be a boolean)
-4. Composition is usually better than Inheritance, especially in a language that doesn't support multiple inheritance. You can inherit from something if you need to.
+1. Usage of `call` is idiomatic Ruby. Procs and method objects respond to `call`, so we are extending an existing Ruby pattern.
+2. Commands should not return anything, but if you are forced to check a result, then set the result to a single object and work off of that object, for instance if you want to use the command as one of the clauses of a case statement (in which case the result would be a boolean)
+3. Composition is usually better than Inheritance, especially in a language that doesn't support multiple inheritance. You can inherit from something if you need to. In current implementation, we're overriding `.new`, which takes away freedom from the dev. This is a blessing and a curse, and may be an indication that inheritance is a better choice.
 
 ## Development
 
