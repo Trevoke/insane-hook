@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    insane_hook (0.3.0)
+    insane_hook (0.4.0)
 
 GEM
   remote: https://rubygems.org/
@@ -32,4 +32,4 @@ DEPENDENCIES
   rspec (~> 3.0)
 
 BUNDLED WITH
-   1.16.1
+   1.16.2

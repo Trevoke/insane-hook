@@ -1,4 +1,4 @@
-module InsaneHook
+class InsaneHook
   module Constants
     ARGS_VAR = :@@_command
     REQUIRED_ARGS = :required

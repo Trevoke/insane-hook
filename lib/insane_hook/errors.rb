@@ -1,4 +1,4 @@
-module InsaneHook
+class InsaneHook
   module Errors
     class CommandNotRunError < StandardError
     end

@@ -1,14 +1,14 @@
+require "insane_hook/class_methods"
 require "insane_hook/version"
 require "insane_hook/errors"
-require "insane_hook/class_methods"
 
-module InsaneHook
+class InsaneHook
   include InsaneHook::Errors
   include InsaneHook::Constants
 
-  def self.included(mod)
-    mod.class_variable_set(ARGS_VAR, {REQUIRED_ARGS => [], OPTIONAL_ARGS => []})
-    mod.extend(ClassMethods)
+  def self.inherited(subclass)
+    subclass.class_variable_set(ARGS_VAR, {REQUIRED_ARGS => [], OPTIONAL_ARGS => []})
+    subclass.extend(InsaneHook::ClassMethods)
   end
 
   def result(value=NO_ARG)

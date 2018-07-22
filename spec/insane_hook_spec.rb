@@ -4,8 +4,7 @@ RSpec.describe InsaneHook do
   end
 
   let(:klass) do
-    klass = Class.new do
-      include InsaneHook
+    klass = Class.new(InsaneHook) do
       requires :required
       fallbacks :optional
       call do
