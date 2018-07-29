@@ -29,7 +29,7 @@ class InsaneHook
       self.class_variable_set(ARGS_VAR, args)
     end
 
-    def fallbacks(key)
+    def optional(key)
       fail "#{key} is not a symbol" unless key.is_a? Symbol
       args = self.class_variable_get(ARGS_VAR)
       args[OPTIONAL_ARGS] << key
@@ -41,7 +41,6 @@ class InsaneHook
         raise "Block cannot take arguments" if block.arity > 0
         raise "call method already defined" if self.instance_methods.include?(:call)
         define_method(:call) do
-          result(nil)
           instance_eval(&block)
           self
         end
