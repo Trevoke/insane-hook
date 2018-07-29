@@ -13,8 +13,8 @@ class InsaneHook
         obj.instance_variable_set("@#{var}", value)
         obj.class.class_eval{attr_reader var}
       end
-      self.class_variable_get(ARGS_VAR)[OPTIONAL_ARGS].each do |var|
-        value = args.fetch(var, nil)
+      self.class_variable_get(ARGS_VAR)[OPTIONAL_ARGS].each do |var, val|
+        value = args.fetch(var, val)
         obj.instance_variable_set("@#{var}", value)
         obj.class.class_eval{attr_reader var}
       end
@@ -22,17 +22,23 @@ class InsaneHook
       obj
     end
 
-    def requires(key)
-      fail "#{key} is not a symbol" unless key.is_a? Symbol
+    def required(*keys)
+      fail "#{key} is not a symbol" unless keys.all? { |x| x.is_a? Symbol }
       args = self.class_variable_get(ARGS_VAR)
-      args[REQUIRED_ARGS] << key
+      args[REQUIRED_ARGS] = (args[REQUIRED_ARGS] + keys).uniq
       self.class_variable_set(ARGS_VAR, args)
     end
 
-    def optional(key)
-      fail "#{key} is not a symbol" unless key.is_a? Symbol
+    def optional(*no_values, **with_values)
+      keys = no_values + with_values.keys
+      fail "#{key} is not a symbol" unless keys.all? { |x| x.is_a? Symbol }
       args = self.class_variable_get(ARGS_VAR)
-      args[OPTIONAL_ARGS] << key
+      no_values.each do |optional_arg|
+        args[OPTIONAL_ARGS][optional_arg] ||= nil
+      end
+      with_values.each do |optional_arg, default_value|
+        args[OPTIONAL_ARGS][optional_arg] ||= default_value
+      end
       self.class_variable_set(ARGS_VAR, args)
     end
 

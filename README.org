@@ -30,9 +30,10 @@ Or install it yourself as:
 
 #+BEGIN_SRC ruby
 class YeOldeTaske < InsaneHook
-  requires :some_required_arg
-  optional :some_optional_arg
-
+  required :arg1, :arg2
+  required :arg0
+  optional :arg3, arg4: 3
+  optional :arg9
   call do
     leak "meaningful value"
   end
@@ -42,36 +43,40 @@ end
 Is equivalent to:
 
 #+BEGIN_SRC ruby
-class YeOldeTaske
+  class YeOldeTaske
 
-  def self.call(**args)
-    new(**args).call
-  end
+    def self.call(**args)
+      new(**args).call
+    end
 
-  attr_reader :some_required_arg, :some_optional_arg
+    attr_reader :arg0, :arg1, :arg2, :arg3, :arg4, :arg9
 
-  def initialize(some_required_arg:, some_optional_arg: nil)
-    @some_required_arg = some_required_arg
-    @some_optional_arg = some_optional_arg
-  end
+    def initialize(arg0:, arg1:, arg2:, arg3: nil, arg9: nil, arg4: 3)
+      @arg0 = arg0
+      @arg1 = arg1
+      @arg2 = arg2
+      @arg3 = arg3
+      @arg4 = arg4
+      @arg9 = arg9
+    end
 
-  def call
-    leak "meaningful value"
-    self
-  end
+    def call
+      leak "meaningful value"
+      self
+    end
 
-  def leak(arg)
-    @result = arg
-  end
+    def leak(arg)
+      @_result = arg
+    end
 
-  def result
-    if instance_variable_defined?(:@result)
-      @result
-    else
-      raise InsaneHook::CommandNotRunError
+    def result
+      if instance_variable_defined?(:@_result)
+        @_result
+      else
+        raise InsaneHook::CommandNotRunError
+      end
     end
   end
-end
 #+END_SRC
 
 

@@ -7,7 +7,7 @@ class InsaneHook
   include InsaneHook::Constants
 
   def self.inherited(subclass)
-    subclass.class_variable_set(ARGS_VAR, {REQUIRED_ARGS => [], OPTIONAL_ARGS => []})
+    subclass.class_variable_set(ARGS_VAR, {REQUIRED_ARGS => [], OPTIONAL_ARGS => {}})
     subclass.extend(InsaneHook::ClassMethods)
   end
 
