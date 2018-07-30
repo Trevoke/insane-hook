@@ -35,6 +35,8 @@ class YeOldeTaske < InsaneHook
   optional :arg3, arg4: 3
   optional :arg9
   call do
+    # Do some work here
+    # If you really need to return something, even though you shouldn't, leak it:
     leak "meaningful value"
   end
 end
