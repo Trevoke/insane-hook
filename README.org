@@ -2,6 +2,25 @@
 
 Enjoy the enforcing-DSL of this command-patterny gem.
 
+** Should you use this?
+
+No, you shouldn't. You should write code like this:
+
+```ruby
+class MyClassThatDoesSomething
+  def initialize(foo:, bar:)
+    @foo = foo
+    @bar = bar
+  end
+  
+  def call
+    # do stuff
+  end
+end
+```
+
+This code is plain Ruby, everyone can understand it, it doesn't depend on anything. It's way better. You do not need this gem. YOU. DO. NOT. NEED. THIS. GEM.
+
 ** Current version
 
 0.5.0
